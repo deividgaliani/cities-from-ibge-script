@@ -1,12 +1,15 @@
-const { Pool, Client } = require("pg");
+const { Client } = require("pg");
 const axios = require("axios");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const client = new Client({
-  user: "pet",
-  host: "localhost",
-  database: "petDB",
-  password: "x12345",
-  port: "5432",
+  user: process.env.USER,
+  host: process.env.HOST,
+  database: process.env.DATABASE,
+  password: process.env.PASSWORD,
+  port: process.env.PORT,
 });
 
 // Retrieve all Brazilian cities from the IBGE API
@@ -41,6 +44,7 @@ async function insertCities(cities) {
       );
     } catch (error) {
       console.log(error);
+      process.exit(1);
     }
   });
   await client.query("COMMIT");
